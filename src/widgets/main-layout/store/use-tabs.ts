@@ -43,7 +43,8 @@ interface TabsState {
     // 분할 관련 함수
     splitTabArea: (count: number) => void;
     moveTabToArea: (tabId: string, targetAreaId: string) => void;
-    closeArea: (areaId: string) => void; // 영역 닫기 함수 추가
+    closeArea: (areaId: string) => void;
+    resizeAreas: (index: number, deltaPercent: number) => void; // 추가된 함수
 }
 
 // 빈 영역 생성 함수
@@ -349,5 +350,35 @@ export const useTabsStore = create<TabsState>((set, get) => ({
             activeTabId: newActiveTabId,
             tabs: newTabs
         });
+    },
+    
+    // 영역 크기 조절 함수 (신규)
+    resizeAreas: (index, deltaPercent) => {
+        const { areaWidths } = get();
+        
+        // 분할 영역이 하나뿐이면 크기 조절 불필요
+        if (areaWidths.length <= 1) return;
+        
+        // index가 마지막 영역이면 조절 불가
+        if (index >= areaWidths.length - 1) return;
+        
+        // 인접한 두 영역 간의 크기 조절
+        const newWidths = [...areaWidths];
+        
+        // 최소 영역 크기 (%)
+        const MIN_WIDTH = 10;
+        
+        // 변경된 너비 계산
+        const newLeftWidth = newWidths[index] + deltaPercent;
+        const newRightWidth = newWidths[index + 1] - deltaPercent;
+        
+        // 최소 너비 제한 확인
+        if (newLeftWidth < MIN_WIDTH || newRightWidth < MIN_WIDTH) return;
+        
+        // 너비 업데이트
+        newWidths[index] = newLeftWidth;
+        newWidths[index + 1] = newRightWidth;
+        
+        set({ areaWidths: newWidths });
     }
 }));

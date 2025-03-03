@@ -1,50 +1,52 @@
 // src/widgets/main-layout/ui/TabContainer/ResizableDivider/index.tsx
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 
 interface Props {
   onResize: (deltaX: number) => void;
 }
 
 const ResizableDivider: React.FC<Props> = ({ onResize }) => {
-  const [isDragging, setIsDragging] = useState(false);
-  
-  // Mouse down event handler
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+  // 마우스 다운 이벤트 핸들러
+  const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsDragging(true);
     
-    // Add event listeners for mouse move and mouse up
+    // 초기 마우스 위치 저장
+    const startX = e.clientX;
+    
+    // 이동 중인 구분선 스타일 적용
+    const divider = e.currentTarget as HTMLElement;
+    divider.classList.add('bg-blue-500');
+    
+    // 마우스 이동 핸들러
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = moveEvent.clientX - startX;
+      onResize(deltaX);
+    };
+    
+    // 마우스 업 핸들러
+    const handleMouseUp = () => {
+      // 이벤트 리스너 제거
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      
+      // 드래그 완료 시 스타일 원복
+      divider.classList.remove('bg-blue-500');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+    
+    // 마우스 이동 및 업 이벤트 리스너 등록
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
     
-    // Set cursor for entire document during dragging
+    // 드래깅 중 커서 및 텍스트 선택 방지
     document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none'; // Prevent text selection during resize
-  }, []);
-  
-  // Mouse move event handler
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (isDragging) {
-      onResize(e.movementX);
-    }
-  }, [isDragging, onResize]);
-  
-  // Mouse up event handler
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
-    
-    // Remove event listeners
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-    
-    // Reset cursor
-    document.body.style.cursor = '';
-    document.body.style.userSelect = '';
-  }, [handleMouseMove]);
+    document.body.style.userSelect = 'none';
+  };
   
   return (
     <div
-      className={`w-1 cursor-col-resize bg-gray-300 hover:bg-blue-400 active:bg-blue-500 ${isDragging ? 'bg-blue-500' : ''}`}
+      className="w-1 bg-gray-300 hover:bg-blue-400 cursor-col-resize"
       onMouseDown={handleMouseDown}
     />
   );
