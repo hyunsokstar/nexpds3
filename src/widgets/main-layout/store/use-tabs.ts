@@ -44,7 +44,10 @@ interface TabsState {
     splitTabArea: (count: number) => void;
     moveTabToArea: (tabId: string, targetAreaId: string) => void;
     closeArea: (areaId: string) => void;
-    resizeAreas: (index: number, deltaPercent: number) => void; // 추가된 함수
+    resizeAreas: (index: number, deltaPercent: number) => void;
+    
+    // 탭 순서 변경 함수
+    reorderTabs: (areaId: string, sourceIndex: number, destinationIndex: number) => void;
 }
 
 // 빈 영역 생성 함수
@@ -352,7 +355,7 @@ export const useTabsStore = create<TabsState>((set, get) => ({
         });
     },
     
-    // 영역 크기 조절 함수 (신규)
+    // 영역 크기 조절 함수
     resizeAreas: (index, deltaPercent) => {
         const { areaWidths } = get();
         
@@ -380,5 +383,43 @@ export const useTabsStore = create<TabsState>((set, get) => ({
         newWidths[index + 1] = newRightWidth;
         
         set({ areaWidths: newWidths });
+    },
+    
+    // 탭 순서 변경 함수
+    reorderTabs: (areaId, sourceIndex, destinationIndex) => {
+        const { areas } = get();
+        
+        // 영역 찾기
+        const areaIndex = areas.findIndex(area => area.id === areaId);
+        if (areaIndex === -1) return;
+        
+        const area = areas[areaIndex];
+        
+        // 같은 위치로 이동하는 경우 무시
+        if (sourceIndex === destinationIndex) return;
+        
+        // 탭 순서 변경
+        const newTabs = [...area.tabs];
+        const [movedTab] = newTabs.splice(sourceIndex, 1);
+        newTabs.splice(destinationIndex, 0, movedTab);
+        
+        // 업데이트된 영역 생성
+        const updatedAreas = [...areas];
+        updatedAreas[areaIndex] = {
+            ...area,
+            tabs: newTabs
+        };
+        
+        // 전체 탭 목록 재구성
+        const allTabs: Tab[] = [];
+        for (const area of updatedAreas) {
+            allTabs.push(...area.tabs);
+        }
+        
+        // 상태 업데이트
+        set({
+            areas: updatedAreas,
+            tabs: allTabs
+        });
     }
 }));
