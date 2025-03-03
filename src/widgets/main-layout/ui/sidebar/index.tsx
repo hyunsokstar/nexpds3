@@ -1,73 +1,3 @@
-// // src\widgets\main-layout\ui\sidebar\index.tsx
-// 'use client'
-
-// import { useState } from 'react'
-// import { ChevronDown, ChevronRight, Phone, User, File, Folder } from 'lucide-react'
-// import { TreeItem, treeData } from './sidebar-items'
-
-// const TreeNode = ({ item, level = 0 }: { item: TreeItem; level?: number }) => {
-//   const [isOpen, setIsOpen] = useState(level === 0) // 첫 번째 레벨은 기본적으로 열려있게
-//   const hasChildren = item.children && item.children.length > 0
-//   const Icon = item.icon || File
-
-//   return (
-//     <div className="select-none">
-//       <div 
-//         className={`flex items-center py-1 px-2 hover:bg-gray-100 ${level === 0 ? 'font-medium' : ''}`}
-//         style={{ paddingLeft: `${level * 16 + 8}px` }}
-//         onClick={() => hasChildren && setIsOpen(!isOpen)}
-//       >
-//         {hasChildren ? (
-//           <span className="mr-1 text-gray-500">
-//             {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-//           </span>
-//         ) : (
-//           <span className="w-4"></span>
-//         )}
-//         <Icon size={14} className="mr-2 text-gray-600" />
-//         <span className="truncate text-sm text-gray-700">{item.name}</span>
-//       </div>
-
-//       {isOpen && hasChildren && (
-//         <div>
-//           {item.children!.map(child => (
-//             <TreeNode key={child.id} item={child} level={level + 1} />
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   )
-// }
-
-// export function Sidebar() {
-//   return (
-//     <div className="flex h-full w-64 flex-col border-r bg-white">
-//       {/* 상담원 헤더 */}
-//       <div className="border-b flex items-center h-12 px-4">
-//         <div className="flex items-center space-x-2">
-//           <Phone size={16} className="text-gray-600" />
-//           <span className="text-sm text-gray-700">상담원</span>
-//         </div>
-//       </div>
-
-//       {/* 검색 부분 */}
-//       <div className="border-b p-2">
-//         <input
-//           type="text"
-//           placeholder="검색..."
-//           className="w-full rounded-sm border px-2 py-1 text-sm outline-none"
-//         />
-//       </div>
-
-//       {/* 트리 내용 */}
-//       <div className="flex-1 overflow-y-auto p-2">
-//         {treeData.map(item => (
-//           <TreeNode key={item.id} item={item} />
-//         ))}
-//       </div>
-//     </div>
-//   )
-// }
 
 'use client'
 
@@ -335,7 +265,7 @@ export function Sidebar() {
       <button
         className="absolute bg-white border rounded-full h-6 w-6 flex items-center justify-center shadow z-20 hover:bg-gray-100"
         style={{ 
-          top: '102px',
+          top: '106px',
           right: -12,
           transform: isCollapsed ? 'rotate(0deg)' : 'rotate(180deg)',
           transition: 'transform 0.3s ease-in-out'

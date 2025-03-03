@@ -1,8 +1,9 @@
+// C:\Users\terec\nexpds-multi\src\widgets\main-layout\index.tsx
 'use client'
 
-import { Header } from './ui/header'
-import { Sidebar } from './ui/sidebar'
-import { TabContainer } from './ui/tab-content/TabContainer'
+import Header from "./ui/header"
+import { Sidebar } from "./ui/sidebar"
+import TabContainer from "./ui/TabContainer"
 
 export function MainLayout() {
   return (
@@ -14,9 +15,13 @@ export function MainLayout() {
         {/* 사이드바 */}
         <Sidebar />
         
-        {/* 통합된 탭 컨테이너 (탭바 + 콘텐츠) */}
-        <TabContainer />
+        {/* 탭 컨테이너 */}
+        <div className="flex-1 overflow-hidden">
+          <TabContainer />
+        </div>
       </div>
     </div>
   )
 }
+
+export default MainLayout
