@@ -1,7 +1,7 @@
 // src/widgets/main-layout/ui/TabContainer/TabBar/index.tsx
 import React, { useCallback, useState, useRef } from 'react'
 import { useTabsStore, TabArea, Tab } from '@/widgets/main-layout/store/use-tabs'
-import { X, Grid, Split, Maximize, MoveRight } from 'lucide-react'
+import { X, MoveRight, Maximize, Columns, LayoutGrid, LayoutPanelLeft } from 'lucide-react'
 import {
   DndContext,
   DragEndEvent,
@@ -316,43 +316,45 @@ const TabBar = ({ className = '', area, areaIndex = 0, disableDndContext = false
         
         {/* 분할 관련 버튼들 - 영역별 탭바에서는 표시하지 않음 */}
         {showSplitButtons && (
-          <>
+          <div className="flex items-center">
             {/* 분할 해제 버튼 (분할 상태일 때만) */}
             {isSplit && (
               <button 
                 className="flex items-center justify-center w-8 h-10 ml-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded"
                 onClick={handleUnsplit}
-                title="분할 해제"
+                title="분할 해제 (단일 화면)"
               >
                 <Maximize size={16} />
               </button>
             )}
             
-            {/* 분할 버튼들 */}
+            {/* 2분할 버튼 - 수직 분할을 더 명확하게 표시 */}
             <button 
               className="flex items-center justify-center w-8 h-10 ml-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded"
               onClick={handleSplit2}
-              title="2분할"
+              title="2분할 (좌우)"
             >
-              <Split size={16} />
+              <Columns size={16} />
             </button>
             
+            {/* 3분할 버튼 - 실제 3분할 레이아웃처럼 보이는 아이콘 */}
             <button 
               className="flex items-center justify-center w-8 h-10 ml-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded"
               onClick={handleSplit3}
-              title="3분할"
+              title="3분할 (좌측 1개, 우측 2개)"
             >
-              <Grid size={16} />
+              <LayoutPanelLeft size={16} />
             </button>
             
+            {/* 4분할 버튼 - 2x2 그리드를 명확하게 표시 */}
             <button 
               className="flex items-center justify-center w-8 h-10 ml-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded"
               onClick={handleSplit4}
-              title="4분할"
+              title="4분할 (2x2 그리드)"
             >
-              <Grid size={16} />
+              <LayoutGrid size={16} />
             </button>
-          </>
+          </div>
         )}
       </div>
     </div>
